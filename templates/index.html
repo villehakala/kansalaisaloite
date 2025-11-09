@@ -27,7 +27,7 @@
   <hr />
   {% endfor %}
 
-  {% if session.citizen_id %}
+  {% if session.user_id %}
   <h2>Uusi aloite</h2>
 
   <form action="/new_initiative" method="post">

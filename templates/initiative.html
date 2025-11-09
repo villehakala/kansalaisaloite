@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{{ initiative.title }}</title>
+</head>
+
+<body>
+  <h1>{{ initiative.title }}</h1>
+
+  <hr />
+  {% for comment in comments %}
+  <p>
+    {{ comment.username }} ({{ comment.created_at }}):
+  </p>
+  <p>
+    {{ comment.content }}
+  </p>
+  {% if comment.user_id == session.user_id %}
+  <p>
+    <a href="/edit/{{ comment.id }}">Muokkaa</a> |
+    <a href="/remove/{{ comment.id }}">Poista</a>
+  </p>
+  {% endif %}
+  <hr />
+  {% endfor %}
+
+  {% if session.user_id %}
+  <h2>Uusi viesti</h2>
+
+  <form action="/new_comment" method="post">
+    <p>
+      Viesti:<br />
+      <textarea name="content" rows="5" cols="40"></textarea>
+    </p>
+    <input type="hidden" name="initiative_id" value="{{ initiative.id }}" />
+    <input type="submit" value="Lähetä" />
+  </form>
+  <hr />
+  {% endif %}
+
+  <p>
+    <a href="/">Etusivulle</a>
+  </p>
+</body>
+
+</html>

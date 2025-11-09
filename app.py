@@ -14,11 +14,11 @@ def index():
 @app.route("/initiative/<int:initiative_id>")
 def show_initiative(initiative_id):
     initiative = forum.get_initiative(initiative_id)
-    messages = forum.get_messages(initiative_id)
-    return render_template("initiative.html", initiative=initiative, messages=messages)
+    comments = forum.get_comments(initiative_id)
+    return render_template("initiative.html", initiative=initiative, comments=comments)
 
-@app.route("/new_thread", methods=["POST"])
-def new_thread():
+@app.route("/new_initiative", methods=["POST"])
+def new_initiative():
     title = request.form["title"]
     content = request.form["content"]
     user_id = session["user_id"]
@@ -26,13 +26,13 @@ def new_thread():
     initiative_id = forum.add_initiative(title, content, user_id)
     return redirect("/initiative/" + str(initiative_id))
 
-@app.route("/new_message", methods=["POST"])
-def new_message():
+@app.route("/new_comment", methods=["POST"])
+def new_comment():
     content = request.form["content"]
     user_id = session["user_id"]
     initiative_id = request.form["initiative_id"]
 
-    forum.add_message(content, user_id, initiative_id)
+    forum.add_comment(content, user_id, initiative_id)
     return redirect("/initiative/" + str(initiative_id))
 
 @app.route("/edit/<int:comment_id>", methods=["GET", "POST"])
@@ -44,7 +44,7 @@ def edit_comment(comment_id):
 
     if request.method == "POST":
         content = request.form["content"]
-        forum.update_message(comment["id"], content)
+        forum.update_comment(comment["id"], content)
         return redirect("/initiative/" + str(comment["initiative_id"]))
 
 @app.route("/remove/<int:comment_id>", methods=["GET", "POST"])
@@ -55,7 +55,7 @@ def remove_comment(comment_id):
 
     if request.method == "POST":
         if "continue" in request.form:
-            forum.remove_message(comment["id"])
+            forum.remove_comment(comment["id"])
         return redirect("/initiative/" + str(comment["initiative_id"]))
 
 @app.route("/register")

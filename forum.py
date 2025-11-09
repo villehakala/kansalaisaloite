@@ -19,24 +19,24 @@ def get_comments(initiative_id):
              ORDER BY c.id"""
     return db.query(sql, [initiative_id])
 
-def get_message(message_id):
-    sql = "SELECT id, content, user_id, thread_id FROM messages WHERE id = ?"
-    return db.query(sql, [message_id])[0]
+def get_comment(comment_id):
+    sql = "SELECT id, content, user_id, thread_id FROM comments WHERE id = ?"
+    return db.query(sql, [comment_id])[0]
 
 def add_initiative(title, content, user_id):
     sql = "INSERT INTO initiatives (title, user_id) VALUES (?, ?)"
     db.execute(sql, [title, user_id])
     initiative_id = db.last_insert_id()
-    add_message(content, user_id, initiative_id)
+    add_comment(content, user_id, initiative_id)
     return initiative_id
 
-def add_message(content, user_id, initiative_id):
-    sql = """INSERT INTO messages (content, sent_at, user_id, initiative_id) VALUES
+def add_comment(content, user_id, initiative_id):
+    sql = """INSERT INTO comments (content, created_at, user_id, initiative_id) VALUES
              (?, datetime('now'), ?, ?)"""
     db.execute(sql, [content, user_id, initiative_id])
 
-def update_message(comment_id, content):
-    sql = "UPDATE messages SET content = ? WHERE id = ?"
+def update_comment(comment_id, content):
+    sql = "UPDATE comments SET content = ? WHERE id = ?"
     db.execute(sql, [content, comment_id])
 
 def remove_comment(comment_id):

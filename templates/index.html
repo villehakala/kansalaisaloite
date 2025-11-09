@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Keskustelu</title>
+</head>
+
+<body>
+  <h1>Keskustelu</h1>
+
+  <p>
+    <a href="/register">Luo tunnus</a> |
+    {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a>
+    {% endif %}
+  </p>
+
+  <hr />
+  {% for initiative in initiatives %}
+  <p>
+    <a href="/initiative/{{ initiative.id }}">{{ initiative.title }}</a>
+    <br />
+    {{ initiative.total }} aloitetta, uusin {{ initiative.last }}
+  </p>
+  <hr />
+  {% endfor %}
+
+  {% if session.citizen_id %}
+  <h2>Uusi aloite</h2>
+
+  <form action="/new_initiative" method="post">
+    <p>
+      Otsikko:<br />
+      <input type="text" name="title" />
+    </p>
+    <p>
+      Viesti:<br />
+      <textarea name="content" rows="5" cols="40"></textarea>
+    </p>
+    <input type="submit" value="Julkaise" />
+  </form>
+  {% endif %}
+</body>
+
+</html>

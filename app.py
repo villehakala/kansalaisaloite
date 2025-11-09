@@ -1,15 +1,99 @@
+import sqlite3
 from flask import Flask
+from flask import redirect, render_template, request, session
+import config, forum, users,db
 
 app = Flask(__name__)
+app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return "<b>Tervetuloa</b> <i>sovellukseen</i>!"
+    initiatives = forum.get_initiatives()
+    return render_template("index.html", initiatives=initiatives)
 
-@app.route("/page1")
-def page1():
-    return "Tämä on sivu 1"
+@app.route("/initiative/<int:initiative_id>")
+def show_initiative(initiative_id):
+    initiative = forum.get_initiative(initiative_id)
+    messages = forum.get_messages(initiative_id)
+    return render_template("initiative.html", initiative=initiative, messages=messages)
 
-@app.route("/page2")
-def page2():
-    return "Tämä on sivu 2"
+@app.route("/new_thread", methods=["POST"])
+def new_thread():
+    title = request.form["title"]
+    content = request.form["content"]
+    user_id = session["user_id"]
+
+    initiative_id = forum.add_initiative(title, content, user_id)
+    return redirect("/initiative/" + str(initiative_id))
+
+@app.route("/new_message", methods=["POST"])
+def new_message():
+    content = request.form["content"]
+    user_id = session["user_id"]
+    initiative_id = request.form["initiative_id"]
+
+    forum.add_message(content, user_id, initiative_id)
+    return redirect("/initiative/" + str(initiative_id))
+
+@app.route("/edit/<int:comment_id>", methods=["GET", "POST"])
+def edit_comment(comment_id):
+    comment = forum.get_comment(comment_id)
+
+    if request.method == "GET":
+        return render_template("edit.html", comment=comment)
+
+    if request.method == "POST":
+        content = request.form["content"]
+        forum.update_message(comment["id"], content)
+        return redirect("/initiative/" + str(comment["initiative_id"]))
+
+@app.route("/remove/<int:comment_id>", methods=["GET", "POST"])
+def remove_comment(comment_id):
+    comment = forum.get_comment(comment_id)
+    if request.method == "GET":
+        return render_template("remove.html", comment=comment)
+
+    if request.method == "POST":
+        if "continue" in request.form:
+            forum.remove_message(comment["id"])
+        return redirect("/initiative/" + str(comment["initiative_id"]))
+
+@app.route("/register")
+def register():
+    return render_template("register.html")
+
+@app.route("/create", methods=["POST"])
+def create():
+    username = request.form["username"]
+    password1 = request.form["password1"]
+    password2 = request.form["password2"]
+    if password1 != password2:
+        return "VIRHE: salasanat eivät ole samat"
+    
+    try:
+        users.create_user(username, password1)
+    except sqlite3.IntegrityError:
+        return "VIRHE: tunnus on jo varattu"
+
+    return "Tunnus luotu"
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        user_id = users.check_login(username, password)
+        if user_id:
+            session["user_id"] = user_id
+            return redirect("/")
+        else:
+            return "VIRHE: väärä tunnus tai salasana"
+
+@app.route("/logout")
+def logout():
+    del session["user_id"]
+    return redirect("/")

@@ -20,7 +20,7 @@ def get_comments(initiative_id):
     return db.query(sql, [initiative_id])
 
 def get_comment(comment_id):
-    sql = "SELECT id, content, user_id, thread_id FROM comments WHERE id = ?"
+    sql = "SELECT id, content, user_id, initiative_id FROM comments WHERE id = ?"
     return db.query(sql, [comment_id])[0]
 
 def add_initiative(title, content, user_id):

@@ -10,7 +10,8 @@ def get_initiatives():
 
 def get_initiative(initiative_id):
     sql = "SELECT id, title FROM initiatives WHERE id = ?"
-    return db.query(sql, [initiative_id])[0]
+    result = db.query(sql, [initiative_id])
+    return result[0] if result else None
 
 def get_comments(initiative_id):
     sql = """SELECT c.id, c.content, c.created_at, c.user_id, u.username
@@ -21,7 +22,8 @@ def get_comments(initiative_id):
 
 def get_comment(comment_id):
     sql = "SELECT id, content, user_id, initiative_id FROM comments WHERE id = ?"
-    return db.query(sql, [comment_id])[0]
+    result = db.query(sql, [comment_id])
+    return result[0] if result else None
 
 def add_initiative(title, content, user_id):
     sql = "INSERT INTO initiatives (title, user_id) VALUES (?, ?)"

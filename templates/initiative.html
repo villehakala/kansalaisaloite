@@ -10,7 +10,7 @@
 
   <hr />
   {% for comment in comments %}
-  <p>
+  <p id="{{ comment.id }}">
     {{ comment.username }} ({{ comment.created_at }}):
   </p>
   <p>

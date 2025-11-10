@@ -11,6 +11,13 @@ def index():
     initiatives = forum.get_initiatives()
     return render_template("index.html", initiatives=initiatives)
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = forum.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
+
+
 @app.route("/initiative/<int:initiative_id>")
 def show_initiative(initiative_id):
     initiative = forum.get_initiative(initiative_id)

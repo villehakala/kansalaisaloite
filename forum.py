@@ -13,6 +13,20 @@ def get_initiative(initiative_id):
     result = db.query(sql, [initiative_id])
     return result[0] if result else None
 
+def search(query):
+    sql = """SELECT c.id comment_id,
+                    c.initiative_id,
+                    i.title initiative_title,
+                    c.created_at,
+                    u.username
+             FROM initiatives i, comments c, users u
+             WHERE i.id = c.initiative_id AND
+                   u.id = c.user_id AND
+                   (c.content LIKE ? or i.title LIKE ?)
+             ORDER BY c.created_at DESC"""
+    return db.query(sql, ["%" + query + "%", "%" + query + "%"])
+
+
 def get_comments(initiative_id):
     sql = """SELECT c.id, c.content, c.created_at, c.user_id, u.username
              FROM comments c, users u

@@ -31,7 +31,7 @@
   <form action="/new_comment" method="post">
     <p>
       Viesti:<br />
-      <textarea name="content" rows="5" cols="40"></textarea>
+      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
     <input type="hidden" name="initiative_id" value="{{ initiative.id }}" />
     <input type="submit" value="Lähetä" />

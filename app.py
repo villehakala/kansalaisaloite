@@ -38,6 +38,10 @@ def new_comment():
     content = request.form["content"]
     user_id = session["user_id"]
     initiative_id = request.form["initiative_id"]
+
+    if not content or len(content) > 5000:
+        abort(403)
+
     try:
         forum.add_comment(content, user_id, initiative_id)
     except sqlite3.IntegrityError:

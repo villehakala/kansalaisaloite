@@ -23,8 +23,9 @@ def show_initiative(initiative_id):
     initiative = forum.get_initiative(initiative_id)
     if not initiative:
         abort(404)
+    votes = forum.get_votes(initiative_id)
     comments = forum.get_comments(initiative_id)
-    return render_template("initiative.html", initiative=initiative, comments=comments)
+    return render_template("initiative.html", initiative=initiative, comments=comments,votes=votes)
 
 @app.route("/new_initiative", methods=["POST"])
 def new_initiative():
@@ -37,6 +38,23 @@ def new_initiative():
         abort(403)
 
     initiative_id = forum.add_initiative(title, content, user_id)
+    return redirect("/initiative/" + str(initiative_id))
+
+@app.route("/like_initiative", methods=["POST"])
+def like_initiative():
+    require_login()
+    initiative_id = request.form["initiative_id"]
+    user_id = session["user_id"]
+
+    # Estetään tuplatykkäykset (valinnainen)
+    #if forum.has_liked(user_id, initiative_id):
+    #    abort(403)
+
+    try:
+        forum.add_like(initiative_id)
+    except sqlite3.IntegrityError:
+        abort(403)
+
     return redirect("/initiative/" + str(initiative_id))
 
 @app.route("/new_comment", methods=["POST"])

@@ -1,7 +1,7 @@
 import db
 
 def get_initiatives():
-    sql = """SELECT i.id, i.title, COUNT(c.id) total, MAX(c.created_at) last
+    sql = """SELECT i.id, i.title, COUNT(c.id) total_comments, i.votes total_votes, MAX(c.created_at) last
              FROM initiatives i, comments c
              WHERE i.id = c.initiative_id
              GROUP BY i.id
@@ -39,12 +39,25 @@ def get_comment(comment_id):
     result = db.query(sql, [comment_id])
     return result[0] if result else None
 
+
+def get_votes(initiative_id):
+    sql = "SELECT votes FROM initiatives WHERE id = ?"
+    result = db.query(sql, [initiative_id])
+    return result[0]["votes"] if result else 0
+
 def add_initiative(title, content, user_id):
     sql = "INSERT INTO initiatives (title, user_id) VALUES (?, ?)"
     db.execute(sql, [title, user_id])
     initiative_id = db.last_insert_id()
     add_comment(content, user_id, initiative_id)
     return initiative_id
+
+
+def add_like(initiative_id):
+    sql = """UPDATE initiatives
+             SET votes = votes + 1
+             WHERE id = ?"""
+    db.execute(sql, [initiative_id])
 
 def add_comment(content, user_id, initiative_id):
     sql = """INSERT INTO comments (content, created_at, user_id, initiative_id) VALUES

@@ -7,7 +7,8 @@ CREATE TABLE users (
 CREATE TABLE initiatives (
     id INTEGER PRIMARY KEY,
     title TEXT,
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users,
+    votes INTEGER DEFAULT 0
 );
 
 CREATE TABLE comments (

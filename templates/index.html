@@ -50,7 +50,8 @@
   <p>
     <a href="/initiative/{{ initiative.id }}">{{ initiative.title }}</a>
     <br />
-    {{ initiative.total }} kommenttia, uusin {{ initiative.last }}
+    {{ initiative.total_votes }} ääntä,
+    {{ initiative.total_comments }} kommenttia
   </p>
   <hr />
   {% endfor %}
@@ -64,7 +65,7 @@
       <input type="text" name="title" maxlength="100" required />
     </p>
     <p>
-      Viesti:<br />
+      Aloitteen kuvaus:<br />
       <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
     <input type="submit" value="Julkaise" />

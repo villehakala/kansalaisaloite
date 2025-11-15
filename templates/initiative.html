@@ -7,9 +7,20 @@
 
 <body>
   <h1>{{ initiative.title }}</h1>
+  
+  <p>Kuvaus: {{ comments[0].content }}</p>
+  <p>Äänet: {{ votes }} / 50 000</p>
+  
+  <form action="/like_initiative" method="post">
+    <input type="hidden" name="initiative_id" value="{{ initiative.id }}">
 
+  <button type="submit">Anna äänesi</button>
+
+  </form>
   <hr />
-  {% for comment in comments %}
+
+  <h3>Aloitteen kommentit</h3>
+  {% for comment in comments[1:] %}
   <p id="{{ comment.id }}">
     {{ comment.username }} ({{ comment.created_at }}):
   </p>
@@ -26,7 +37,7 @@
   {% endfor %}
 
   {% if session.user_id %}
-  <h2>Uusi viesti</h2>
+  <h2>Uusi kommentti</h2>
 
   <form action="/new_comment" method="post">
     <p>

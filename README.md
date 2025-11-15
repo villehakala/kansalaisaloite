@@ -1,9 +1,12 @@
 # Kansalaisaloite 2.0
-  * Sovelluksessa käyttäjät pystyvät luomaan ja jakamaan kansalaisaloitteita. Aloitteessa lukee sen tiedot.
-    * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
-    * Käyttäjä pystyy lisäämään aloitteita ja muokkaamaan ja poistamaan niitä.
-    * Käyttäjä näkee sovellukseen lisätyt aloitteita.
-    * Käyttäjä pystyy etsimään aloitteita hakusanalla.
-    * Käyttäjäsivu näyttää listan käyttäjän aloitteita ja kommentteja sekä niiden määrän. 
-    * Käyttäjä pystyy valitsemaan aloitteelle yhden tai useamman politiikkasektorin
-    * Käyttäjä pystyy antamaan aloitteelle kommentin ja arvosanan. Aloitteesta näytetään kommentit ja keskimääräinen arvosana.
+* Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
+* Kirjautuneet käyttäjät pystyvät luomaan kansalaisaloitteita. Aloitteella on sekä nimi että kuvaus.
+* Kirjautuneet käyttäjät voivat myös äänestää aloitteiden puolesta ja kommentoida niitä.
+* Kommentteja voi muokata ja poistaa.
+* Käyttäjä näkee sovellukseen lisätyt aloitteet etusivulla ja pystyy myös etsimään niitä hakusaalla.
+
+## Testaaminen:
+* Sovelluksen testaaminen Windows-käyttöjärjestelmällä edellyttää, että Python, Pythonin Flask kirjasto sekä STQlite ovat asennettuina.
+* Sovelluksessa tulee mukana tietokantaskeema, jonka mukaisen kannan saa pystytettyä Powershelissä komennolla  _cat schema.sql | sqlite3 database.db_
+* Kun kanta on pystyssä saa ohjelman käyntiin komennolla flask.run
+* Ohjelman käyttöliittymään pääsee käsiksi osoitteessa http://127.0.0.1:5000/

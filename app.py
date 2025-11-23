@@ -150,3 +150,11 @@ def login():
 def logout():
     del session["user_id"]
     return redirect("/")
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    messages = users.get_messages(user_id)
+    return render_template("user.html", user=user, messages=messages)

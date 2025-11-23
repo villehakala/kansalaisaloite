@@ -22,7 +22,8 @@
   <h3>Aloitteen kommentit</h3>
   {% for comment in comments[1:] %}
   <p id="{{ comment.id }}">
-    {{ comment.username }} ({{ comment.created_at }}):
+    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> 
+    ({{ comment.created_at }}):
   </p>
   <p>
     {{ comment.content }}

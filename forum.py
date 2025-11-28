@@ -71,3 +71,26 @@ def update_comment(comment_id, content):
 def remove_comment(comment_id):
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])
+
+def add_hashtags(initiative_id, content):
+    initiative_id = int(initiative_id)
+    hashtags = []
+    words = content.split()
+    for word in words:
+        if word.startswith('#') and len(word) > 1:
+            hashtag = word.strip().lower().lstrip('#')
+            hashtags.append(hashtag)
+    
+    for hashtag in hashtags:
+        if not hashtag:
+            continue
+
+        db.execute("INSERT OR IGNORE INTO hashtags (name) VALUES (?)", [hashtag])
+        row = db.query("SELECT id FROM hashtags WHERE name = ?", [hashtag])
+        hashtag_id = row[0]["id"]
+        print(initiative_id, hashtag_id)
+        db.execute("""INSERT OR IGNORE INTO initiative_hashtags (initiative_id, hashtag_id)
+                      VALUES (?, ?)""", [initiative_id, hashtag_id])
+        
+
+  

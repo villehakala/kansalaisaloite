@@ -18,3 +18,16 @@ CREATE TABLE comments (
     user_id INTEGER REFERENCES users,
     initiative_id INTEGER REFERENCES initiatives
 );
+
+CREATE TABLE hashtags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE initiative_hashtags (
+    initiative_id INTEGER NOT NULL,
+    hashtag_id INTEGER NOT NULL,
+    FOREIGN KEY (initiative_id) REFERENCES initiatives(id),
+    FOREIGN KEY (hashtag_id) REFERENCES hashtags(id),
+    UNIQUE(initiative_id, hashtag_id)
+);

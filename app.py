@@ -36,8 +36,11 @@ def new_initiative():
 
     if not title or len(title) > 100 or not content or len(content) > 5000:
         abort(403)
-
+    
     initiative_id = forum.add_initiative(title, content, user_id)
+    
+    forum.add_hashtags(initiative_id, content)
+
     return redirect("/initiative/" + str(initiative_id))
 
 @app.route("/like_initiative", methods=["POST"])

@@ -1,26 +1,19 @@
- <h1>Käyttäjä {{ user.username }}</h1>
+<h1>Käyttäjä {{ user.username }}</h1>
 
-  <p>
-    Käyttäjä on lähettänyt {{ messages | count }} viestiä
-  </p>
+<p>
+  Käyttäjä on lähettänyt {{ comments | length }} kommenttia
+</p>
 
-  {% if messages %}
-  <p>
-    Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }}
-  </p>
-  <p>
-    Viimeisin viesti lähetetty {{ messages[0].sent_at }}
-  </p>
-  {% endif %}
-
-   <ul>
-  {% for message in messages %}
-    <li>
-      <a href="/thread/{{ message.thread_id }}#{{ message.id }}">
-        {{ message.thread_title }}
-      </a>
-      <br />
-      ({{ message.sent_at }})
-    </li>  
-  {% endfor %}
-  </ul>
+<ul>
+{% for comment in comments %}
+  <li>
+    <a href="{{ url_for('show_initiative', initiative_id=comment.initiative_id) }}">
+        {{ comment.thread_title }}
+    </a>
+    <br />
+    <small>{{ comment.created_at }}</small>
+    <br />
+    {{ comment.content }}
+  </li>
+{% endfor %}
+</ul>

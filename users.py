@@ -20,16 +20,14 @@ def get_user(user_id):
     result = db.query(sql, [user_id])
     return result[0] if result else None
 
-def get_messages(user_id):
+def get_user_comments(user_id):
     sql = """SELECT c.id,
                     c.initiative_id,
                     i.title thread_title,
-                    c.created_at
+                    c.created_at,
+                    c.content
              FROM initiatives i, comments c
              WHERE i.id = c.initiative_id AND
                    c.user_id = ?
              ORDER BY c.created_at DESC"""
     return db.query(sql, [user_id])
-
-
-    return None

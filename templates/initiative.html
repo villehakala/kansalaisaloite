@@ -9,16 +9,10 @@
   <h1>{{ initiative.title }}</h1>
   
   <p>Kuvaus: {{ comments[0].content }}</p>
-  
-  <p>Asiasana:
-  {% for tag in initiative.hashtags %}
-    #{{ tag.name }}
-  {% endfor %}
-  </p>
 
   <p>Äänet: {{ votes }} / 50 000</p>
   
-  <form action="/like_initiative" method="post">
+  <form action="/vote_initiative" method="post">
     <input type="hidden" name="initiative_id" value="{{ initiative.id }}">
 
   <button type="submit">Anna äänesi</button>

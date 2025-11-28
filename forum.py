@@ -48,16 +48,29 @@ def get_votes(initiative_id):
 def add_initiative(title, content, user_id):
     sql = "INSERT INTO initiatives (title, user_id) VALUES (?, ?)"
     db.execute(sql, [title, user_id])
+    
     initiative_id = db.last_insert_id()
     add_comment(content, user_id, initiative_id)
     return initiative_id
 
 
-def add_like(initiative_id):
+def add_vote(user_id, initiative_id):
+    
+    sql = """INSERT INTO initiative_votes (user_id, initiative_id)
+                    VALUES (?, ?)"""
+    db.execute(sql, [user_id, initiative_id])
+
     sql = """UPDATE initiatives
              SET votes = votes + 1
              WHERE id = ?"""
     db.execute(sql, [initiative_id])
+
+
+def has_voted(user_id, initiative_id):
+    sql = "SELECT 1 FROM initiative_votes WHERE user_id = ? AND initiative_id = ?"
+    result = db.query(sql, [user_id, initiative_id])
+    return bool(result)
+
 
 def add_comment(content, user_id, initiative_id):
     sql = """INSERT INTO comments (content, created_at, user_id, initiative_id) VALUES
@@ -91,6 +104,7 @@ def add_hashtags(initiative_id, content):
         print(initiative_id, hashtag_id)
         db.execute("""INSERT OR IGNORE INTO initiative_hashtags (initiative_id, hashtag_id)
                       VALUES (?, ?)""", [initiative_id, hashtag_id])
+
         
 
   

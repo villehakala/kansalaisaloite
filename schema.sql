@@ -31,3 +31,11 @@ CREATE TABLE initiative_hashtags (
     FOREIGN KEY (hashtag_id) REFERENCES hashtags(id),
     UNIQUE(initiative_id, hashtag_id)
 );
+
+
+CREATE TABLE initiative_votes (
+    initiative_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    UNIQUE(user_id, initiative_id),
+    FOREIGN KEY (initiative_id) REFERENCES initiatives(id)
+);

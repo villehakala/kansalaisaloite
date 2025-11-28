@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask
+from flask import Flask, flash
 from flask import redirect, render_template, request, session, abort
 import config, forum, users,db
 
@@ -43,18 +43,16 @@ def new_initiative():
 
     return redirect("/initiative/" + str(initiative_id))
 
-@app.route("/like_initiative", methods=["POST"])
-def like_initiative():
+@app.route("/vote_initiative", methods=["POST"])
+def vote_initiative():
     require_login()
     initiative_id = request.form["initiative_id"]
     user_id = session["user_id"]
 
-    # Estetään tuplatykkäykset (valinnainen)
-    #if forum.has_liked(user_id, initiative_id):
-    #    abort(403)
-
+    if forum.has_voted(user_id, initiative_id):
+        return redirect("/initiative/" + str(initiative_id))
     try:
-        forum.add_like(initiative_id)
+        forum.add_vote(user_id, initiative_id)
     except sqlite3.IntegrityError:
         abort(403)
 

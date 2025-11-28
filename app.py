@@ -115,9 +115,13 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
+def require_logout():
+    if "user_id" in session:
+        abort(403)
 
 @app.route("/create", methods=["POST"])
 def create():
+    require_logout()
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
@@ -133,6 +137,7 @@ def create():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    require_logout()
     if request.method == "GET":
         return render_template("login.html")
 

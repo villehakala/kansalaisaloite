@@ -1,15 +1,25 @@
 # Kansalaisaloite 2.0
 * Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 * Kirjautuneet käyttäjät pystyvät luomaan kansalaisaloitteita. Aloitteella on sekä nimi että kuvaus.
-  * Lisäämällä kuvaukseen sanan alkuun "#", voidaan aloitteelle luoda vapaita luokitteluja (joita tullaan hyödyntämään ohjelman tulevissa versioissa)
-* Kirjautuneet käyttäjät voivat myös äänestää aloitteiden puolesta ja kommentoida niitä.
+  * Aloitteelle voi valita luokittelun valmiista luokista tai lisätä vapaavalintaisen luokittelun laittamalla minkä vaan kuvauksen sanan alkuun "#".
+* Kirjautuneet käyttäjät voivat myös antaa äänensä aloitteelle ja kommentoida niitä.
   * Kommentteja voi muokata ja poistaa.
-  * Klikkaamalla kommentin tehnyttä käyttäjää käyttäjäsivuille, josta löytyvät muut käyttäjän kommentit 
-* Käyttäjä näkee sovellukseen lisätyt aloitteet etusivulla ja pystyy myös etsimään niitä hakusaalla.
+  * Klikkaamalla kommentin tehnyttä käyttäjää käyttäjäsivuille, josta löytyvät käyttäjän aloitteet ja kommentit
+* Käyttäjä näkee sovellukseen lisätyt aloitteet etusivulla ja pystyy myös etsimään niitä hakusanalla.
 
 
 ## Testaaminen:
-* Sovelluksen testaaminen Windows-käyttöjärjestelmällä edellyttää, että Python, Pythonin Flask kirjasto sekä STQlite ovat asennettuina.
-* Sovelluksessa tulee mukana tietokantaskeema, jonka mukaisen kannan saa pystytettyä Powershelissä komennolla  _cat schema.sql | sqlite3 database.db_
-* Kun kanta on pystyssä saa ohjelman käyntiin komennolla flask.run
-* Ohjelman käyttöliittymään pääsee käsiksi osoitteessa http://127.0.0.1:5000/
+
+Asenna flask-kirjasto, jos tätä ei ole jo asennettu
+
+$ pip install flask
+
+Luo tietokannan taulut
+
+$ sqlite3 database.db < schema.sql
+
+Käynnistä sovellus
+
+$ flask run
+
+Aluksi sivustolla ei ole mitään lisäyksiä, mutta tässä esimerkkejä, joita voi lisätä: Huomioi, että sivustolle täytyy olla kirjautunut, jotta voi tehdä lisäyksiä.

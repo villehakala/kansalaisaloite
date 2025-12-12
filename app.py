@@ -1,3 +1,4 @@
+import secrets
 import sqlite3
 from flask import Flask, flash
 from flask import redirect, render_template, request, session, abort
@@ -29,6 +30,7 @@ def show_initiative(initiative_id):
 
 @app.route("/new_initiative", methods=["POST"])
 def new_initiative():
+    check_csrf()
     require_login()
     title = request.form["title"]
     content = request.form["content"]
@@ -45,6 +47,7 @@ def new_initiative():
 
 @app.route("/vote_initiative", methods=["POST"])
 def vote_initiative():
+    check_csrf()
     require_login()
     initiative_id = request.form["initiative_id"]
     user_id = session["user_id"]
@@ -60,6 +63,7 @@ def vote_initiative():
 
 @app.route("/new_comment", methods=["POST"])
 def new_comment():
+    check_csrf()
     require_login()
     content = request.form["content"]
     user_id = session["user_id"]
@@ -76,6 +80,7 @@ def new_comment():
 
 @app.route("/edit/<int:comment_id>", methods=["GET", "POST"])
 def edit_comment(comment_id):
+    check_csrf()
     require_login()
     comment = forum.get_comment(comment_id)
     if not comment:
@@ -94,6 +99,7 @@ def edit_comment(comment_id):
 
 @app.route("/remove/<int:comment_id>", methods=["GET", "POST"])
 def remove_comment(comment_id):
+    check_csrf()
     require_login()
     comment = forum.get_comment(comment_id)
     if not comment:
@@ -135,6 +141,10 @@ def create():
 
     return render_template("new_user.html", username=username)
 
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     require_logout()
@@ -148,6 +158,8 @@ def login():
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
+            session["csrf_token"] = secrets.token_hex(16)
+            print(session)
             return redirect("/")
         else:
             return "VIRHE: väärä tunnus tai salasana"

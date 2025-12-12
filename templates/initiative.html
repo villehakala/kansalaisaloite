@@ -14,7 +14,7 @@
   
   <form action="/vote_initiative" method="post">
     <input type="hidden" name="initiative_id" value="{{ initiative.id }}">
-
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
   <button type="submit">Anna äänesi</button>
 
   </form>
@@ -47,6 +47,7 @@
       <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
     <input type="hidden" name="initiative_id" value="{{ initiative.id }}" />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
   <hr />

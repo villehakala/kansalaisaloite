@@ -20,6 +20,4 @@ $ sqlite3 database.db < schema.sql
 
 Käynnistä sovellus
 
-$ flask run
-
-Aluksi sivustolla ei ole mitään lisäyksiä, mutta tässä esimerkkejä, joita voi lisätä: Huomioi, että sivustolle täytyy olla kirjautunut, jotta voi tehdä lisäyksiä.
+$ flask run.

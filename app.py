@@ -26,7 +26,8 @@ def show_initiative(initiative_id):
         abort(404)
     votes = forum.get_votes(initiative_id)
     comments = forum.get_comments(initiative_id)
-    return render_template("initiative.html", initiative=initiative, comments=comments,votes=votes)
+    hashtags = forum.get_hashtags(initiative_id)
+    return render_template("initiative.html", initiative=initiative, comments=comments,votes=votes, hashtags=hashtags)
 
 @app.route("/new_initiative", methods=["POST"])
 def new_initiative():
@@ -40,8 +41,10 @@ def new_initiative():
         abort(403)
     
     initiative_id = forum.add_initiative(title, content, user_id)
-    
-    forum.add_hashtags(initiative_id, content)
+
+    selected_tags = request.form.getlist("predefined_tags")
+
+    forum.add_hashtags(initiative_id, content, selected_tags=selected_tags)
 
     return redirect("/initiative/" + str(initiative_id))
 

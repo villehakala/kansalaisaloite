@@ -10,6 +10,18 @@
   
   <p>Kuvaus: {{ comments[0].content }}</p>
 
+  
+
+  <p>
+    <strong>Hashtagit:</strong>
+    {% for tag in hashtags %}
+      <span style="display:inline-block;margin-right:8px;">
+        #{{ tag.name if tag.name is defined else tag }}
+      </span>
+    {% endfor %}
+  </p>
+
+
   <p>Äänet: {{ votes }} / 50 000</p>
   
   {% if session.user_id %}

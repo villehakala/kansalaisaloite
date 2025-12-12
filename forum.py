@@ -74,7 +74,7 @@ def has_voted(user_id, initiative_id):
 
 def add_comment(content, user_id, initiative_id):
     sql = """INSERT INTO comments (content, created_at, user_id, initiative_id) VALUES
-             (?, datetime('now'), ?, ?)"""
+             (?, datetime('now', 'localtime'), ?, ?)"""
     db.execute(sql, [content, user_id, initiative_id])
 
 def update_comment(comment_id, content):

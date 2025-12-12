@@ -12,6 +12,7 @@
 
   <p>Äänet: {{ votes }} / 50 000</p>
   
+  {% if session.user_id %}
   <form action="/vote_initiative" method="post">
     <input type="hidden" name="initiative_id" value="{{ initiative.id }}">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -19,6 +20,7 @@
 
   </form>
   <hr />
+  {% endif %}
 
   <h3>Aloitteen kommentit</h3>
   {% for comment in comments[1:] %}

@@ -7,13 +7,11 @@
 
 <body>
   <h1>Kansalaisaloite 2.0</h1>
-  <p>
-    {% if not session.user_id %}
-    <a href="/register">Luo tunnus</a> |
-    {% endif %}
+  <p> |
     {% if session.user_id %}
     <a href="/logout">Kirjaudu ulos</a>
     {% else %}
+    <a href="/register">Luo tunnus</a>
     <a href="/login">Kirjaudu sisään</a>
     {% endif %}
   </p>

@@ -68,6 +68,7 @@ def vote_initiative():
 def new_comment():
     check_csrf()
     require_login()
+
     content = request.form["content"]
     user_id = session["user_id"]
     initiative_id = request.form["initiative_id"]
@@ -83,7 +84,6 @@ def new_comment():
 
 @app.route("/edit/<int:comment_id>", methods=["GET", "POST"])
 def edit_comment(comment_id):
-    check_csrf()
     require_login()
     comment = forum.get_comment(comment_id)
     if not comment:
@@ -96,13 +96,13 @@ def edit_comment(comment_id):
         return render_template("edit.html", comment=comment)
 
     if request.method == "POST":
+        check_csrf()
         content = request.form["content"]
         forum.update_comment(comment["id"], content)
         return redirect("/initiative/" + str(comment["initiative_id"]))
 
 @app.route("/remove/<int:comment_id>", methods=["GET", "POST"])
 def remove_comment(comment_id):
-    check_csrf()
     require_login()
     comment = forum.get_comment(comment_id)
     if not comment:
@@ -112,6 +112,7 @@ def remove_comment(comment_id):
         return render_template("remove.html", comment=comment)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             forum.remove_comment(comment["id"])
         return redirect("/initiative/" + str(comment["initiative_id"]))
